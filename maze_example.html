@@ -20,23 +20,81 @@
 	});
 
 
+	function move(currentPos, direction) {
+		if (canMoveFromPosition(currentPos, direction)) {
+			switch(direction) {
+			case 0: // N
+				currentPos[1]--;
+				break;
+			case 1: // W
+				currentPos[0]--;
+				break;
+			case 2: // E
+				currentPos[0]++;
+				break;
+			case 3: // S
+				currentPos[1]++;
+				break;
+			}
+		}
+
+		return currentPos;
+	}
+
+	function canMoveFromPosition(position, direction) {
+		switch(direction) {
+		case 0: // N
+			if(position[1] > 0 && theMaze.vertical[position[0]][position[1]-1]) return true;
+			break;
+		case 1: // W
+			if(position[0] > 0 && theMaze.horizontal[position[0]-1][position[1]]) return true;
+			break;
+		case 2: // E
+			if(theMaze.horizontal[position[0]][position[1]]) return true;
+			break;
+		case 3: // S
+			if(theMaze.vertical[position[0]][position[1]]) return true;
+			break;
+		default:
+			return false;		
+		}
+	}
+
+	function getMovable(position) {
+		var ret = [];
+		for(i = 0; i<4; i++) {
+			ret[i] = canMoveFromPosition(position, i);
+		}
+
+		return ret;
+	}
+
 	function solveMaze() {
 		//Entry: 0;0
 		//Exit: x;y
 		function moveFunc() {
 			try {
-				eval("var moveCode = function(state){" + $('#moveCode').val() + "};");
-				var direction = moveCode(state);
+				eval("var moveCode = function(state, movable){" + $('#moveCode').val() + "};");
+				var movable = getMovable(currentPos);
+				var direction = moveCode(state, movable);
 				return direction;
 			} catch(e) {
-				alert(e);
+				console.log(e.toString());
 			}
 		};
 
-		while (!(currentPos[0] == x && currentPos[1] == y)) {
-			direction = moveFunc();
-			currentPos = move(theMaze, currentPos, direction);
+		function run() {
+			var direction = moveFunc();
+			currentPos = move(currentPos, direction);
+
+			if (currentPos[0] == x-1 && currentPos[1] == y-1) {
+				alert("wohoo");
+				clearInterval(run);
+			}
+
 		}
+
+		setInterval(run, 150);
 	}
 </script>
 <h1>Maze example</h1>

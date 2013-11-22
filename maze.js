@@ -67,22 +67,3 @@ function move(theMaze, currentPos, direction) {
 	currentPos[1]++;
 	return currentPos;
 }
-
-function canMoveFromPosition(position, direction) {
-	switch(direction) {
-	case 1: // N
-		if(maze.verti[position[0]][position[1]-1]) return true;
-		break;
-	case 2: // W
-		if(maze.horiz[position[0]-1][position[1]]) return true;
-		break;
-	case 3: // E
-		if(maze.horiz[position[0]][position[1]]) return true;
-		break;
-	case 4: // S
-		if(maze.verti[position[0]][position[1]]) return true;
-		break
-	default:
-		return false;		
-	}
-}
