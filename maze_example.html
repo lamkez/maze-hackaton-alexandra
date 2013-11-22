@@ -1,13 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\
-
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"> </script>
-<script type="text/javascript" src="maze.js"/></script>
+<script src="js/lib/maze.js"></script>
+<script src="js/lib/three.min.js"></script>
+<script src="js/lib/maze-visualizer.js"></script>
+<script type="text/javascript">
+	//init 
+	var x=5, y=5, currentPos=[0,0], state, direction;
+	var theMaze = maze(5,5);
+	
+	$( document ).ready(function() {
+		//draw
+		var mazevis = new mazevisualizer.initialize(document.getElementById('chart_div'), theMaze);
+	});
+
+
+	function solveMaze() {
+		//Entry: 0;0
+		//Exit: x;y
+		function moveFunc() {
+			try {
+				eval("var moveCode = function(state){" + $('#moveCode').val() + "};");
+				var direction = moveCode(state);
+				return direction;
+			} catch(e) {
+				alert(e);
+			}
+		};
+
+		while (!(currentPos[0] == x && currentPos[1] == y)) {
+			direction = moveFunc();
+			currentPos = move(theMaze, currentPos, direction);
+		}
+</script>
 <h1>Maze example</h1>
 <p style="margin: 0px;">function move(state) {</p><br />
 <textarea id="moveCode" style="width: 300px; height: 300px; margin: 0px; margin-left: 15px; padding: 0px;">
@@ -16,37 +46,9 @@
 //alert("more code and " + i);	
 //return { N:true, S:false, W:false, E:true };
 return 2;
-</textarea><br />
+</textarea>
+<div id="chart_div" style="width: 350px;height: 350px;"></div><br />
 <p style="margin: 0px;">}</p>
-
 <button type="button" onClick="solveMaze()">Click Me!</button>
-<script>
-function solveMaze() {
-	//Entry: 0;0
-	//Exit: x;y
-	var x=5, y=5, currentPos=[0,0], state, direction;
-	maze(5,5);
-	//theMaze = maze(5,5);
-	function moveFunc() {
-		try {
-			eval("var moveCode = function(state){" + $('#moveCode').val() + "};");
-			var direction = moveCode(state);
-			return direction;
-		} catch(e) {
-			alert(e);
-		}
-	};
-
-	while (currentPos == [x,y]) {
-		direction = moveFunc();
-		move(theMaze, currentPos, direction);
-	}
-	//maze = maze(5,5);
-	//alert("maze.x: " + maze.x+", maze.y: " + maze.y+", maze.horizontal: " + maze.horiz +", maze.vertical: " + maze.verti);
-	//alert(display(maze));
-	//eval($('#moveCode').val());
-}
-</script>
-
 </body>
 </html>
