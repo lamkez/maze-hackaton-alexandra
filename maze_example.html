@@ -1,23 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>\
+
 </head>
 <body>
 
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"> </script>
+<script type="text/javascript" src="maze.js"/></script>
 <h1>Maze example</h1>
+<p style="margin: 0px;">function move(state) {</p><br />
+<textarea id="moveCode" style="width: 300px; height: 300px; margin: 0px; margin-left: 15px; padding: 0px;">
+//alert("hej!");
+//var i = 5;
+//alert("more code and " + i);	
+//return { N:true, S:false, W:false, E:true };
+return 2;
+</textarea><br />
+<p style="margin: 0px;">}</p>
 
-<button type="button">Click Me!</button>
+<button type="button" onClick="solveMaze()">Click Me!</button>
 <script>
-alert("hej");
-</script>
+function solveMaze() {
+	//Entry: 0;0
+	//Exit: x;y
+	var x=5, y=5, currentPos=[0,0], state, direction;
+	maze(5,5);
+	//theMaze = maze(5,5);
+	function moveFunc() {
+		try {
+			eval("var moveCode = function(state){" + $('#moveCode').val() + "};");
+			var direction = moveCode(state);
+			return direction;
+		} catch(e) {
+			alert(e);
+		}
+	};
 
-<script src="maze.js"/>
-<script>
-alert("hej");
-maze = maze(5,5);
-alert("maze.x: " + maze.x+", maze.y: " + maze.y+", maze.horizontal: " + maze.horiz +", maze.vertical: " + maze.verti);
-alert(display(maze));
+	while (currentPos == [x,y]) {
+		direction = moveFunc();
+		move(theMaze, currentPos, direction);
+	}
+	//maze = maze(5,5);
+	//alert("maze.x: " + maze.x+", maze.y: " + maze.y+", maze.horizontal: " + maze.horiz +", maze.vertical: " + maze.verti);
+	//alert(display(maze));
+	//eval($('#moveCode').val());
+}
 </script>
 
 </body>

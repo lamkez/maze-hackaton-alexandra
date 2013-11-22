@@ -61,3 +61,7 @@ function display(m) {
 	}
 	return text.join('');
 }
+
+function move(theMaze, currentPos, direction) {
+	alert("moved!")
+}
