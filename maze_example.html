@@ -48,16 +48,16 @@
 	function canMoveFromPosition(position, direction) {
 		switch(direction) {
 		case 0: // N
-			if(position[1] > 0 && theMaze.vertical[position[0]][position[1]-1]) return true;
+			if(position[1] > 0 && theMaze.vertical[(position[1]-1)][position[0]]) return true;
 			break;
 		case 1: // W
-			if(position[0] > 0 && theMaze.horizontal[position[0]-1][position[1]]) return true;
+			if(position[0] > 0 && theMaze.horizontal[position[1]][position[0]-1]) return true;
 			break;
 		case 2: // E
-			if(theMaze.horizontal[position[0]][position[1]]) return true;
+			if(theMaze.horizontal[position[1]][position[0]]) return true;
 			break;
 		case 3: // S
-			if(theMaze.vertical[position[0]][position[1]]) return true;
+			if(theMaze.vertical[position[1]][position[0]]) return true;
 			break;
 		default:
 			return false;		
@@ -90,18 +90,18 @@
 			}
 		};
 
+		var intervalTimer = setInterval(run, 150);
+
 		function run() {
 			var direction = moveFunc();
 			currentPos = move(currentPos, direction);
 			console.log("we are at: "+ currentPos[0] + " " + currentPos[1]);
 			if (currentPos[0] == x-1 && currentPos[1] == y-1) {
 				alert("wohoo");
-				clearInterval(run);
+				clearInterval(intervalTimer);
 			}
 
 		}
-
-		setInterval(run, 150);
 	}
 	
 </script>
