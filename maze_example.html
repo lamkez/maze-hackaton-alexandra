@@ -9,14 +9,17 @@
 <script src="js/lib/maze.js"></script>
 <script src="js/lib/three.min.js"></script>
 <script src="js/lib/maze-visualizer.js"></script>
+
 <script type="text/javascript">
 	//init 
 	var x=5, y=5, currentPos=[0,0], state, direction;
 	var theMaze = maze(5,5);
 	
+	var mazevis;
 	$( document ).ready(function() {
 		//draw
-		var mazevis = new mazevisualizer.initialize(document.getElementById('chart_div'), theMaze);
+		mazevis = new mazevisualizer.initialize(document.getElementById('chart_div'), theMaze);
+		
 	});
 
 
@@ -96,10 +99,12 @@
 
 		setInterval(run, 150);
 	}
+	
 </script>
 <h1>Maze example</h1>
 <p style="margin: 0px;">function move(state) {</p><br />
 <textarea id="moveCode" style="width: 300px; height: 300px; margin: 0px; margin-left: 15px; padding: 0px;">
+
 //alert("hej!");
 //var i = 5;
 //alert("more code and " + i);	

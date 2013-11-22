@@ -15,15 +15,15 @@ mazevisualizer.initialize = function(container, maze)
 	
 	var scene = new THREE.Scene();
 	var renderer;
-    try {
-        if (window.WebGLRenderingContext) {
-            renderer = new THREE.WebGLRenderer( { 
-               antialias: true
-            } );
-        } 
-    }
-    catch (e) {
-    }
+    // try {
+    //     if (window.WebGLRenderingContext) {
+    //         renderer = new THREE.WebGLRenderer( { 
+    //            antialias: true
+    //         } );
+    //     } 
+    // }
+    // catch (e) {
+    // }
     if (!renderer) {
         // The attempt to create a WebGLRenderer failed.  Use a
         // CanvasRenderer instead.
@@ -46,42 +46,25 @@ mazevisualizer.initialize = function(container, maze)
 	var endMaterial = new THREE.MeshBasicMaterial( { color: new THREE.Color("lightgreen") } );
 	
 	// Draw plating board
-	var size = 10;
+	var size = 15;
 	var wallSize = 2;
 	var spacing = size + wallSize;
 	
 	// Start spot
 	{
-		var geometry = new THREE.PlaneGeometry(size,size,1, 1);
-		var cube = new THREE.Mesh( geometry, startMaterial );
-		scene.add( cube );
+		var player = imageMarker("couch.png", new THREE.Color("white"), 0.9);
+		player.position.x = 0;
+		player.position.y = 0;
+		scene.add(player);
 	}
 	
 	// Start spot
 	{
-		var geometry = new THREE.PlaneGeometry(size,size,1, 1);
-		var cube = new THREE.Mesh( geometry, endMaterial );
-		cube.position.x = spacing * (maze.x - 1);
-		cube.position.y = -spacing * (maze.y - 1);
-		scene.add( cube );
+		var player = imageMarker("duff.png", new THREE.Color("white"), 1.0);
+		player.position.x = spacing * (maze.x - 1);
+		player.position.y = -spacing * (maze.y - 1);
+		scene.add(player);
 	}
-	
-/*	for (var i = 0; i < maze.x; ++i)
-	{
-		for (var j = 0; j < maze.y; ++j)
-		{
-			var geometry = new THREE.PlaneGeometry(size,size,1, 1);
-			var material = spaceMaterial;
-			if (i == 0 && j == 0)
-				material = startMaterial;
-			if (i == maze.x - 1 && j == maze.y - 1)
-				material = endMaterial;
-			var cube = new THREE.Mesh( geometry, material.clone() );
-			cube.position.x = spacing * i;
-			cube.position.y = -spacing * j;
-			scene.add( cube );
-		}
-	}*/
 	
 	// Draw outer walls
 	for (var y = 0; y < maze.y; ++y)
@@ -113,6 +96,52 @@ mazevisualizer.initialize = function(container, maze)
 				scene.add( cube );
 			}
 		}
+	}
+	
+	function imageMarker(url, color, scale)
+	{
+		var res, material;
+		if (renderer instanceof THREE.CanvasRenderer)
+		{
+			material = new THREE.ParticleBasicMaterial( { color:color, blending: THREE.NormalBlending, sizeAttenuation:false } );
+			res = new THREE.Particle(material);
+		}
+		else
+		{
+			material = new THREE.SpriteMaterial({color:color, transparent:false, useScreenCoordinates:false, blending: THREE.NormalBlending});
+			res = new THREE.Sprite(material);
+		}
+		
+		// Load image texture from URL and set particle size on load done.
+		var texture = THREE.ImageUtils.loadTexture(url, null, function (texture){
+			if (material instanceof THREE.ParticleBasicMaterial)
+			{
+				res.scale.x = scale * 0.4;
+				res.scale.y = scale * 0.4;
+			}
+			else
+			{
+				res.scale.x = scale * texture.image.width / windowHeight;
+				res.scale.y = scale * texture.image.height / windowHeight;
+			}
+			material.map = texture;
+			dirty = true;
+		});
+		
+		return res;
+	}
+		
+	// App player
+	var player = imageMarker("homer.png", new THREE.Color("blue"), 0.55);
+	player.position.x = 0;
+	player.position.y = 0;
+	scene.add(player);
+	
+	this.updatePlayerPosition = function(position)
+	{
+		console.log("Move to position " + position[0] + ", " + position[1]);
+		player.position.x = position[0] * spacing;
+		player.position.y = -position[1] * spacing;
 	}
 	
 	// Camera
