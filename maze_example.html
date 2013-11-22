@@ -94,8 +94,14 @@
 
 		function run() {
 			var direction = moveFunc();
+			var oldPos = [currentPos[0], currentPos[1]];
 			currentPos = move(currentPos, direction);
-			console.log("we are at: "+ currentPos[0] + " " + currentPos[1]);
+			console.log("Did move to " + currentPos[0] + " " + currentPos[1]);
+			if (currentPos[0] == oldPos[0] && currentPos[1] == oldPos[1])
+			{
+				alert("D'OH!!!!");
+				clearInterval(intervalTimer);
+			}
 			if (currentPos[0] == x-1 && currentPos[1] == y-1) {
 				alert("wohoo");
 				clearInterval(intervalTimer);
