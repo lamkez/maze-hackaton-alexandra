@@ -112,6 +112,9 @@ mazevisualizer.initialize = function(container, maze)
 			res = new THREE.Sprite(material);
 		}
 		
+		res.scale.x = 3;
+		res.scale.y = 3;
+
 		// Load image texture from URL and set particle size on load done.
 		var texture = THREE.ImageUtils.loadTexture(url, null, function (texture){
 			if (material instanceof THREE.ParticleBasicMaterial)
