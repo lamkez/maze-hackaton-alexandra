@@ -9,7 +9,7 @@ mazevisualizer.initialize = function(container, maze)
 	
 	// COLORS
 	var topColorLightnessOffset = 0.15;
-	var backgroundColor = new THREE.Color( "gray" );
+	var backgroundColor = new THREE.Color( "white" );
 	var wallColor = new THREE.Color( "black" );
 	var mazeColor = new THREE.Color( "white" );
 	
@@ -52,7 +52,7 @@ mazevisualizer.initialize = function(container, maze)
 	
 	// Start spot
 	{
-		var player = imageMarker("couch.png", new THREE.Color("white"), 0.9);
+		var player = imageMarker("couch.png", new THREE.Color("white"), 8.0 / maze.x);
 		player.position.x = 0;
 		player.position.y = 0;
 		scene.add(player);
@@ -60,7 +60,7 @@ mazevisualizer.initialize = function(container, maze)
 	
 	// Start spot
 	{
-		var player = imageMarker("duff.png", new THREE.Color("white"), 1.0);
+		var player = imageMarker("duff.png", new THREE.Color("white"), 10.0 / maze.x);
 		player.position.x = spacing * (maze.x - 1);
 		player.position.y = -spacing * (maze.y - 1);
 		scene.add(player);
@@ -135,7 +135,7 @@ mazevisualizer.initialize = function(container, maze)
 	}
 		
 	// App player
-	var player = imageMarker("homer.png", new THREE.Color("blue"), 0.55);
+	var player = imageMarker("homer.png", new THREE.Color("blue"), 5.0 / maze.x);
 	player.position.x = 0;
 	player.position.y = 0;
 	scene.add(player);
