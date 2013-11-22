@@ -20,9 +20,9 @@ function checkUserInput(text){
     }
 
     var positionPattern = /currentPos/ig;
-    if(text.match(positionPattern){
-	alert("Nope - CHEATER.. Do not try to change the position yourself");
-	return false;
+    if(text.match(positionPattern)) {
+	   alert("Nope - CHEATER.. Do not try to change the position yourself");
+	   return false;
     }
 
     return true;

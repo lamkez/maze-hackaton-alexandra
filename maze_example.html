@@ -9,6 +9,7 @@
 <script src="js/lib/maze.js"></script>
 <script src="js/lib/three.min.js"></script>
 <script src="js/lib/maze-visualizer.js"></script>
+<script src="js/lib/checkInput.js"></script>
 
 <script type="text/javascript">
 	//init 
@@ -19,7 +20,7 @@
 	$( document ).ready(function() {
 		//draw
 		mazevis = new mazevisualizer.initialize(document.getElementById('chart_div'), theMaze);
-		
+		console.log(display(theMaze));
 	});
 
 
@@ -77,10 +78,13 @@
 		//Exit: x;y
 		function moveFunc() {
 			try {
-				eval("var moveCode = function(state, movable){" + $('#moveCode').val() + "};");
-				var movable = getMovable(currentPos);
-				var direction = moveCode(state, movable);
-				return direction;
+				var userCode = $('#moveCode').val();
+				if (checkUserInput(userCode)) {
+					eval("var moveCode = function(state, movable){" + userCode + "};");
+					var movable = getMovable(currentPos);
+					var direction = moveCode(state, movable);
+					return direction;
+				}
 			} catch(e) {
 				console.log(e.toString());
 			}
@@ -89,7 +93,7 @@
 		function run() {
 			var direction = moveFunc();
 			currentPos = move(currentPos, direction);
-
+			console.log("we are at: "+ currentPos[0] + " " + currentPos[1]);
 			if (currentPos[0] == x-1 && currentPos[1] == y-1) {
 				alert("wohoo");
 				clearInterval(run);
