@@ -30,7 +30,7 @@ function maze(x,y) {
 		} else 
 			here = path.pop();
 	}
-	return {x: x, y: y, horiz: horiz, verti: verti};
+	return {x: x, y: y, horizontal: horiz, vertical: verti};
 }
  
 function display(m) {
@@ -42,14 +42,14 @@ function display(m) {
 				if (0 == k%4) 
 					line[k]= '+';
 				else
-					if (j>0 && m.verti[j/2-1][Math.floor(k/4)])
+					if (j>0 && m.vertical[j/2-1][Math.floor(k/4)])
 						line[k]= ' ';
 					else
 						line[k]= '-';
 		else
 			for (var k=0; k<m.y*4+1; k++)
 				if (0 == k%4)
-					if (k>0 && m.horiz[(j-1)/2][k/4-1])
+					if (k>0 && m.horizontal[(j-1)/2][k/4-1])
 						line[k]= ' ';
 					else
 						line[k]= '|';
