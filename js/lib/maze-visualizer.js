@@ -42,33 +42,54 @@ mazevisualizer.initialize = function(container, maze)
 	// Materials
 	var wallMaterial =  new THREE.MeshBasicMaterial( { color: wallColor } );
 	var spaceMaterial = new THREE.MeshBasicMaterial( { color: mazeColor } );
+	var startMaterial = new THREE.MeshBasicMaterial( { color: new THREE.Color("pink") } );
+	var endMaterial = new THREE.MeshBasicMaterial( { color: new THREE.Color("lightgreen") } );
 	
 	// Draw plating board
 	var size = 10;
 	var wallSize = 2;
 	var spacing = size + wallSize;
-	for (var i = 0; i < maze.x; ++i)
+	
+	// Start spot
+	{
+		var geometry = new THREE.PlaneGeometry(size,size,1, 1);
+		var cube = new THREE.Mesh( geometry, startMaterial );
+		scene.add( cube );
+	}
+	
+	// Start spot
+	{
+		var geometry = new THREE.PlaneGeometry(size,size,1, 1);
+		var cube = new THREE.Mesh( geometry, endMaterial );
+		cube.position.x = spacing * (maze.x - 1);
+		cube.position.y = -spacing * (maze.y - 1);
+		scene.add( cube );
+	}
+	
+/*	for (var i = 0; i < maze.x; ++i)
 	{
 		for (var j = 0; j < maze.y; ++j)
 		{
 			var geometry = new THREE.PlaneGeometry(size,size,1, 1);
 			var material = spaceMaterial;
-			var cube = new THREE.Mesh( geometry, material );
+			if (i == 0 && j == 0)
+				material = startMaterial;
+			if (i == maze.x - 1 && j == maze.y - 1)
+				material = endMaterial;
+			var cube = new THREE.Mesh( geometry, material.clone() );
 			cube.position.x = spacing * i;
 			cube.position.y = -spacing * j;
 			scene.add( cube );
 		}
-	}
+	}*/
 	
 	// Draw outer walls
-	console.log( maze.horizontal);
-	console.log( maze.vertical);
 	for (var y = 0; y < maze.y; ++y)
 	{
 		for (var x = -1; x < maze.x; ++x)
 		{
-			var horizontalSpace = (x == -1 || !maze.horizontal[y][x]) && !(y == maze.y - 1 && x == maze.x - 1);
-			var verticalSpace = (x == -1 || !maze.vertical[x][y]) && !(y == 0 && x == -1);
+			var horizontalSpace = x == -1 || !maze.horizontal[y][x];
+			var verticalSpace = x == -1 || !maze.vertical[x][y];
 			
 			// Horizontal
 			if (verticalSpace)
