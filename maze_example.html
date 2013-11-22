@@ -1,32 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
 
-<h1>Maze example</h1>
-
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"> </script>
 <script src="js/lib/maze.js"></script>
 <script src="js/lib/three.min.js"></script>
 <script src="js/lib/maze-visualizer.js"></script>
 
+<script type="text/javascript">
+	//init 
+	var x=5, y=5, currentPos=[0,0], state, direction;
+	var theMaze = maze(5,5);
+	
+	var mazevis;
+	$( document ).ready(function() {
+		//draw
+		mazevis = new mazevisualizer.initialize(document.getElementById('chart_div'), theMaze);
+		
+	});
 
-<div id="chart_div" style="width: 500px;height: 500px;"></div>
 
-<script>
-maze = maze(8,8);
+	function solveMaze() {
+		//Entry: 0;0
+		//Exit: x;y
+		function moveFunc() {
+			try {
+				eval("var moveCode = function(state){" + $('#moveCode').val() + "};");
+				var direction = moveCode(state);
+				return direction;
+			} catch(e) {
+				alert(e);
+			}
+		};
 
-var mazevis = new mazevisualizer.initialize(document.getElementById('chart_div'), maze);
-
-var x = 0;
-var y = 0;
-setInterval(function(){
-	mazevis.updatePlayerPosition({x:x, y:y});
-	x = (x + 1) % maze.x;
-},150);
-
+		function evaluate() {
+			direction = moveFunc();
+			currentPos = move(theMaze, currentPos, direction);
+			mazevis.updatePlayerPosition(currentPos);
+		};
+		
+		setTimeout(evaluate, 150);	
+	}
+	
 </script>
+<h1>Maze example</h1>
+<p style="margin: 0px;">function move(state) {</p><br />
+<textarea id="moveCode" style="width: 300px; height: 300px; margin: 0px; margin-left: 15px; padding: 0px;">
 
+//alert("hej!");
+//var i = 5;
+//alert("more code and " + i);	
+//return { N:true, S:false, W:false, E:true };
+return 2;
+</textarea>
+<div id="chart_div" style="width: 350px;height: 350px;"></div><br />
+<p style="margin: 0px;">}</p>
+<button type="button" onClick="solveMaze()">Click Me!</button>
 </body>
 </html>

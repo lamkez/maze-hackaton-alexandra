@@ -139,10 +139,11 @@ mazevisualizer.initialize = function(container, maze)
 	
 	this.updatePlayerPosition = function(position)
 	{
-		player.position.x = position.x * spacing;
-		player.position.y = position.y * spacing;
+		console.log("Move to position " + position[0] + ", " + position[1]);
+		player.position.x = position[0] * spacing;
+		player.position.y = -position[1] * spacing;
 	}
-			
+	
 	// Camera
 	var camera = new THREE.OrthographicCamera( container.clientWidth / -5, container.clientWidth / 5, container.clientHeight / 5, container.clientHeight / -5, 1, 1000 );
 	camera.position.x = spacing * maze.x / 2.0;
