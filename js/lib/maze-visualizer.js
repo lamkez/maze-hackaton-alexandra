@@ -145,11 +145,17 @@ mazevisualizer.initialize = function(container, maze)
 	}
 	
 	// Camera
-	var camera = new THREE.OrthographicCamera( container.clientWidth / -5, container.clientWidth / 5, container.clientHeight / 5, container.clientHeight / -5, 1, 1000 );
-	camera.position.x = spacing * maze.x / 2.0;
-	camera.position.y = -spacing * maze.y / 2.0;
-	camera.position.z = 200;
-	camera.fov = 75;
+	var totalWidth = spacing * maze.x;
+	var totalHeight = spacing * maze.y;
+	var windowScale = 0.53;
+	var camera = new THREE.OrthographicCamera( -totalWidth * windowScale, 
+		totalWidth * windowScale, 
+		totalHeight * windowScale, 
+		-totalHeight * windowScale, 
+		1, 1000 );
+	camera.position.x = spacing * (maze.x-1) / 2.0;
+	camera.position.y = -spacing * (maze.y-1) / 2.0;
+	camera.position.z = 10;
 	camera.lookAt(new THREE.Vector3(camera.position.x,camera.position.y,0));
 	// Make sure camera matrices are up to date
 	camera.updateMatrix();
