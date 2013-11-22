@@ -96,6 +96,7 @@
 			var direction = moveFunc();
 			var oldPos = [currentPos[0], currentPos[1]];
 			currentPos = move(currentPos, direction);
+			mazevis.updatePlayerPosition(currentPos);
 			console.log("Did move to " + currentPos[0] + " " + currentPos[1]);
 			if (currentPos[0] == oldPos[0] && currentPos[1] == oldPos[1])
 			{
@@ -111,18 +112,22 @@
 	}
 	
 </script>
-<h1>Maze example</h1>
+<h1>Maze Game</h1>
+<div style="width: 100%;">
+	<div style="float:left; width: 20%;">
 <p style="margin: 0px;">function move(state) {</p><br />
-<textarea id="moveCode" style="width: 300px; height: 300px; margin: 0px; margin-left: 15px; padding: 0px;">
+		<textarea id="moveCode" style="width: 300px; height: 300px; margin: 0px; margin-left: 15px; padding: 0px;">
 
-//alert("hej!");
-//var i = 5;
-//alert("more code and " + i);	
-//return { N:true, S:false, W:false, E:true };
-return 2;
-</textarea>
-<div id="chart_div" style="width: 350px;height: 350px;"></div><br />
-<p style="margin: 0px;">}</p>
-<button type="button" onClick="solveMaze()">Click Me!</button>
+		//alert("hej!");
+		//var i = 5;
+		//alert("more code and " + i);	
+		//return { N:true, S:false, W:false, E:true };
+		return 2;
+		</textarea>
+		<p style="margin: 0px;">}</p> <br/>
+		<button type="button" onClick="solveMaze()">Click Me!</button>
+	</div>
+	<div id="chart_div" style="height: 350px; float:left; width: 30%;"></div><br />
+</div>
 </body>
 </html>
