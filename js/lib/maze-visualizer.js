@@ -38,18 +38,7 @@ mazevisualizer.initialize = function(container, maze)
 	renderer.sortElements = true;
 	renderer.autoClear = true;
 	container.appendChild( renderer.domElement );
-	
-	// Camera
-	var camera = new THREE.OrthographicCamera( container.clientWidth / -5, container.clientWidth / 5, container.clientHeight / 5, container.clientHeight / -5, 1, 1000 );
-	camera.position.z = 200;
-	camera.position.y = 0;
-	camera.position.x = 0;
-	camera.fov = 75;
-	camera.lookAt(new THREE.Vector3(0,0,0));
-	// Make sure camera matrices are up to date
-	camera.updateMatrix();
-	camera.updateMatrixWorld();
-	
+		
 	// Materials
 	var wallMaterial =  new THREE.MeshBasicMaterial( { color: wallColor } );
 	var spaceMaterial = new THREE.MeshBasicMaterial( { color: mazeColor } );
@@ -66,58 +55,56 @@ mazevisualizer.initialize = function(container, maze)
 			var material = spaceMaterial;
 			var cube = new THREE.Mesh( geometry, material );
 			cube.position.x = spacing * i;
-			cube.position.y = spacing * j;
+			cube.position.y = -spacing * j;
 			scene.add( cube );
 		}
 	}
 	
 	// Draw outer walls
-	for (var i = 0; i < maze.x; ++i)
+	console.log( maze.horizontal);
+	console.log( maze.vertical);
+	for (var y = 0; y < maze.y; ++y)
 	{
-		for (var j = 0; j < maze.y + 1; ++j)
+		for (var x = -1; x < maze.x; ++x)
 		{
-			var index = maze.x * j + i;
-			var horizontalEdge = !maze.horizontal[index];
-			var verticalEdge = !maze.vertical[index];
+			var horizontalSpace = (x == -1 || !maze.horizontal[y][x]) && !(y == maze.y - 1 && x == maze.x - 1);
+			var verticalSpace = (x == -1 || !maze.vertical[x][y]) && !(y == 0 && x == -1);
 			
 			// Horizontal
-			if (horizontalEdge)
+			if (verticalSpace)
 			{
 				var geometry = new THREE.PlaneGeometry(size,wallSize,1, 1);
 				var material = wallMaterial;
 				var cube = new THREE.Mesh( geometry, material );
-				cube.position.x = spacing * i;
-				cube.position.y = spacing / 2 + spacing * (j-1);
-				scene.add( cube );				
+				cube.position.x = spacing * y;
+				cube.position.y = -(spacing / 2 + spacing * x);
+				scene.add( cube );
 			}
 			
 			// Vertical
-			if (verticalEdge)
+			if (horizontalSpace)
 			{
 				var geometry = new THREE.PlaneGeometry(wallSize,size,1, 1);
 				var material = wallMaterial;
 				var cube = new THREE.Mesh( geometry, material );
-				cube.position.x = spacing / 2 + spacing * (j-1);
-				cube.position.y = spacing * (i);
-				scene.add( cube );				
+				cube.position.x = spacing / 2 + spacing * x;
+				cube.position.y = -(spacing * y);
+				scene.add( cube );
 			}
 		}
 	}
-		
-	// Parse maze
-	for (var i = 0; i < maze.x; ++i)
-	{
-		for (var j = 0; j < maze.y; ++j)
-		{			
-			var geometry = new THREE.PlaneGeometry(size,size,1, 1);
-			var material = horizontalEdge === true ? spaceMaterial : wallMaterial;
-			var cube = new THREE.Mesh( geometry, material );
-			cube.position.x = spacing * i;
-			cube.position.y = spacing * j;
-			scene.add( cube );
-		}
-	}	
 	
+	// Camera
+	var camera = new THREE.OrthographicCamera( container.clientWidth / -5, container.clientWidth / 5, container.clientHeight / 5, container.clientHeight / -5, 1, 1000 );
+	camera.position.x = spacing * maze.x / 2.0;
+	camera.position.y = -spacing * maze.y / 2.0;
+	camera.position.z = 200;
+	camera.fov = 75;
+	camera.lookAt(new THREE.Vector3(camera.position.x,camera.position.y,0));
+	// Make sure camera matrices are up to date
+	camera.updateMatrix();
+	camera.updateMatrixWorld();
+			
 	var animate = function() {
 		requestAnimationFrame(animate);
 	
